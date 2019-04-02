@@ -28,6 +28,7 @@ namespace MarkdownSuite
 
         public List<FileSelection> Directory { get; set; } = new List<FileSelection>();
 
+        public FileSelection EditingSelected { get; set; }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -40,7 +41,7 @@ namespace MarkdownSuite
 
             Console.WriteLine(dir);
 
-            string[] filePaths = System.IO.Directory.GetFiles(dir, "*.*",
+            string[] filePaths = System.IO.Directory.GetFiles(dir, "*.md",
                                          SearchOption.AllDirectories);
 
             foreach (String filePath in filePaths)
@@ -51,6 +52,17 @@ namespace MarkdownSuite
             }
 
             fileSelection.ItemsSource = Directory;
+        }
+
+        private void EditSelected(Object sender, RoutedEventArgs e)
+        {
+            EditingSelected = Directory.Find(x => x.FileName.Equals(((Button)sender).Tag));
+            previewTextbox.DataContext = EditingSelected;
+            //previewTextbox.Text = EditingSelected.Content;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
 
         }
     }
@@ -65,10 +77,14 @@ namespace MarkdownSuite
 
         public Boolean Selected { get; set; }
 
+        public String Content { get; set; }
+
         public FileSelection(string filePath)
         {
             this.Dir = filePath;
             this.FileName = System.IO.Path.GetFileName(filePath);
+
+            this.Content = File.ReadAllText(this.Dir);
         }
 
     }

@@ -8,7 +8,7 @@
         Title="Markdown Suite" Height="450" Width="800">
     <Grid>
         <Button x:Name="loadDirectoryBtn" Content="Load Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>
-        <ListView x:Name="fileSelection" HorizontalAlignment="Left" Margin="10,42,0,10" Width="214">
+        <ListView x:Name="fileSelection" HorizontalAlignment="Left" Margin="10,42,0,10" Width="214" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
@@ -19,9 +19,19 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding FileName}" Header="ID" />
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Tag="{Binding FileName}" Content="edit" Click="EditSelected"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
+        <TextBox x:Name="previewTextbox" Margin="349,190,10,55" TextWrapping="Wrap" Text="{Binding Content}"/>
+        <Button Content="^" HorizontalAlignment="Left" Margin="349,140,0,0" VerticalAlignment="Top" Width="20" Click="Button_Click_1"/>
+        <Button Content="v" HorizontalAlignment="Left" Margin="349,165,0,0" VerticalAlignment="Top" Width="20" Click="Button_Click_1"/>
 
     </Grid>
 </Window>
