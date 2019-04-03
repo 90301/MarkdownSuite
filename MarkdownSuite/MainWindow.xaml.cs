@@ -24,11 +24,15 @@ namespace MarkdownSuite
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         public List<FileSelection> Directory { get; set; } = new List<FileSelection>();
 
         public FileSelection EditingSelected { get; set; }
+
+        public GeneratedDocument GenDoc { get; set; } = new GeneratedDocument();
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
@@ -57,13 +61,58 @@ namespace MarkdownSuite
         private void EditSelected(Object sender, RoutedEventArgs e)
         {
             EditingSelected = Directory.Find(x => x.FileName.Equals(((Button)sender).Tag));
-            previewTextbox.DataContext = EditingSelected;
+            editorGrid.DataContext = EditingSelected;
+
+            processedGrid.DataContext = this;
+            //previewTextbox.DataContext = EditingSelected;
             //previewTextbox.Text = EditingSelected.Content;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void DownBtn_Click(object sender, RoutedEventArgs e)
         {
+            int index = Directory.FindIndex(x => x.Equals(EditingSelected));
 
+            if (index < Directory.Count -1 && index != -1)
+            {
+                FileSelection tmp = Directory[index + 1];
+                Directory[index + 1] = EditingSelected;
+                Directory[index] = tmp;
+            }
+
+        }
+
+        private void UpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int index = Directory.FindIndex(x => x.Equals(EditingSelected));
+
+            if (index > 0)
+            {
+                FileSelection tmp = Directory[index - 1];
+                Directory[index - 1] = EditingSelected;
+                Directory[index] = tmp;
+            }
+            
+        }
+
+        private void ProcessBtn_Click(object sender, RoutedEventArgs e)
+        {
+            processedGrid.DataContext = this.GenDoc;
+
+            titleEditor.DataContext = this.GenDoc;
+            previewProcessedTextbox.DataContext = this.GenDoc;
+
+
+
+            IEnumerable<FileSelection> selected = Directory.Where(x => x.Selected);
+            if (selected.Count() >= 1)
+            {
+
+                GenDoc.FinalDoc = selected.Select(x => x.Content).Aggregate((x, y) => x + Environment.NewLine + Environment.NewLine + y);
+
+                Console.WriteLine(GenDoc.FinalDoc);
+
+                previewProcessedTextbox.Text = GenDoc.FinalDoc;
+            }
         }
     }
 
@@ -87,5 +136,12 @@ namespace MarkdownSuite
             this.Content = File.ReadAllText(this.Dir);
         }
 
+    }
+
+    public class GeneratedDocument
+    {
+        public String FinalDoc { get; set; } = "";
+
+        public String DocName { get; set; } = "";
     }
 }
