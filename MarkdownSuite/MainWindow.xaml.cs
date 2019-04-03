@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -132,6 +133,31 @@ namespace MarkdownSuite
             GenDoc.FileLocation = Dir + GenDoc.DocName + ".md";
 
             System.IO.File.WriteAllText(GenDoc.FileLocation, GenDoc.FinalDoc);
+
+
+
+            // create pdf
+
+            string processName = "pandoc.exe";
+            string arguments = GenDoc.FileLocation + " -o " + Dir+GenDoc.DocName+".pdf";
+            
+            var psi = new ProcessStartInfo
+            {
+                FileName = processName,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardInput = true
+            };
+
+            var process = new Process { StartInfo = psi };
+
+            Console.WriteLine(processName + " " + arguments);
+
+            process.Start();
+            process.WaitForExit();
+            
+            
         }
     }
 
