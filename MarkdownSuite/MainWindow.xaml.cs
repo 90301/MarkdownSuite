@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace MarkdownSuite
             processedGrid.DataContext = GenDoc;
         }
 
-        public List<FileSelection> Directory { get; set; } = new List<FileSelection>();
+        public ObservableCollection<FileSelection> Directory { get; set; } = new ObservableCollection<FileSelection>();
 
         public FileSelection EditingSelected { get; set; }
 
@@ -55,9 +56,12 @@ namespace MarkdownSuite
 
             foreach (String filePath in filePaths)
             {
-                Directory.Add(new FileSelection(filePath));
+                if (Directory.ToList().Find(x => x.Dir.Equals(filePath)) == null) {
 
-                Console.WriteLine(filePath);
+                    Directory.Add(new FileSelection(filePath));
+
+                    Console.WriteLine(filePath);
+                }
             }
 
             //fileSelection.ItemsSource = Directory;
@@ -67,7 +71,7 @@ namespace MarkdownSuite
 
         private void EditSelected(Object sender, RoutedEventArgs e)
         {
-            EditingSelected = Directory.Find(x => x.FileName.Equals(((Button)sender).Tag));
+            EditingSelected = Directory.ToList().Find(x => x.FileName.Equals(((Button)sender).Tag));
             editorGrid.DataContext = EditingSelected;
 
             processedGrid.DataContext = this;
@@ -77,7 +81,7 @@ namespace MarkdownSuite
 
         private void DownBtn_Click(object sender, RoutedEventArgs e)
         {
-            int index = Directory.FindIndex(x => x.Equals(EditingSelected));
+            int index = Directory.ToList().FindIndex(x => x.Equals(EditingSelected));
 
             if (index < Directory.Count -1 && index != -1)
             {
@@ -90,7 +94,7 @@ namespace MarkdownSuite
 
         private void UpBtn_Click(object sender, RoutedEventArgs e)
         {
-            int index = Directory.FindIndex(x => x.Equals(EditingSelected));
+            int index = Directory.ToList().FindIndex(x => x.Equals(EditingSelected));
 
             if (index > 0)
             {

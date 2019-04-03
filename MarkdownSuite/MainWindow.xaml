@@ -9,7 +9,7 @@
         >
     <Grid>
         <Button x:Name="loadDirectoryBtn" Content="Load Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="LoadDirectory_Click"/>
-        <ListView x:Name="fileSelection" HorizontalAlignment="Left" Margin="10,42,0,10" Width="214" ItemsSource="{Binding Directory}" >
+        <ListView x:Name="fileSelection" Margin="10,42,520,10" ItemsSource="{Binding Directory}" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
@@ -33,18 +33,23 @@
 
 
         <Grid x:Name="editorGrid">
-            <TextBox x:Name="previewTextbox" Margin="233,190,316,55" TextWrapping="Wrap" Text="{Binding Content}"/>
-            <Button x:Name="upBtn" Content="^" HorizontalAlignment="Left" Margin="233,140,0,0" VerticalAlignment="Top" Width="20" Click="UpBtn_Click"/>
-            <Button x:Name="downBtn" Content="v" HorizontalAlignment="Left" Margin="233,165,0,0" VerticalAlignment="Top" Width="20" Click="DownBtn_Click"/>
-            <CheckBox x:Name="enabledCheckbox" Content="Enabled" HorizontalAlignment="Left" Margin="258,168,0,0" VerticalAlignment="Top" IsChecked="{Binding Path= Selected}" />
-            
+            <Label x:Name="fileEditorNameLabel" Content="{Binding FileName}" Margin="0,138,267,0" HorizontalAlignment="Right" Width="218" Height="23" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="0" FontSize="9" />
+            <TextBox x:Name="previewTextbox" Margin="0,188,267,57" TextWrapping="Wrap" Text="{Binding Content}" HorizontalAlignment="Right" Width="243" SpellCheck.IsEnabled="True"/>
+            <Button x:Name="upBtn" Content="^" Margin="0,138,490,0" VerticalAlignment="Top" Click="UpBtn_Click" HorizontalAlignment="Right" Width="20"/>
+            <Button x:Name="downBtn" Content="v" Margin="0,163,490,0" VerticalAlignment="Top" Click="DownBtn_Click" HorizontalAlignment="Right" Width="20"/>
+            <CheckBox x:Name="enabledCheckbox" Content="Enabled" HorizontalAlignment="Right" Margin="0,166,423,0" VerticalAlignment="Top" IsChecked="{Binding Path= Selected}" />
+
 
         </Grid>
         <Grid x:Name="processedGrid">
-            <Button x:Name="processBtn" Content="Process" HorizontalAlignment="Left" Margin="707,165,0,0" VerticalAlignment="Top" Width="75" Click="ProcessBtn_Click"/>
-            <TextBox x:Name="titleEditor" HorizontalAlignment="Left" Height="20" Margin="539,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" Text="{Binding DocName, Mode=TwoWay}"/>
-            <TextBox x:Name="previewProcessedTextbox" Margin="539,190,10,55" TextWrapping="Wrap" Text="{Binding FinalDoc, Mode=TwoWay}"/>
-            <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="539,369,0,0" VerticalAlignment="Top" Width="75" Click="Save_Click"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="274*"/>
+                <RowDefinition Height="145*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="processBtn" Content="Process" Margin="0,165,10,0" VerticalAlignment="Top" Click="ProcessBtn_Click" HorizontalAlignment="Right" Width="75"/>
+            <TextBox x:Name="titleEditor" Height="20" Margin="0,165,90,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding DocName, Mode=TwoWay}" HorizontalAlignment="Right" Width="163"/>
+            <TextBox x:Name="previewProcessedTextbox" Margin="0,190,10,55" TextWrapping="Wrap" Text="{Binding FinalDoc, Mode=TwoWay}" Grid.RowSpan="2" HorizontalAlignment="Right" Width="243" SpellCheck.IsEnabled="True"/>
+            <Button x:Name="saveBtn" Content="Save" Margin="0,0,178,30" Click="Save_Click" Grid.Row="1" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
         </Grid>
     </Grid>
 </Window>
