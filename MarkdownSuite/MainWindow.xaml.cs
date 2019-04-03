@@ -24,7 +24,10 @@ namespace MarkdownSuite
         public MainWindow()
         {
             InitializeComponent();
+
             
+
+            processedGrid.DataContext = GenDoc;
         }
 
         public List<FileSelection> Directory { get; set; } = new List<FileSelection>();
@@ -33,19 +36,21 @@ namespace MarkdownSuite
 
         public GeneratedDocument GenDoc { get; set; } = new GeneratedDocument();
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public String Dir { get; set; }
+
+        private void LoadDirectory_Click(object sender, RoutedEventArgs e)
         {
 
             
             //Loads the directory
 
-            String dir = AppDomain.CurrentDomain.BaseDirectory;
+            Dir = AppDomain.CurrentDomain.BaseDirectory;
 
             //TODO dialog box
 
-            Console.WriteLine(dir);
+            Console.WriteLine(Dir);
 
-            string[] filePaths = System.IO.Directory.GetFiles(dir, "*.md",
+            string[] filePaths = System.IO.Directory.GetFiles(Dir, "*.md",
                                          SearchOption.AllDirectories);
 
             foreach (String filePath in filePaths)
@@ -55,7 +60,9 @@ namespace MarkdownSuite
                 Console.WriteLine(filePath);
             }
 
-            fileSelection.ItemsSource = Directory;
+            //fileSelection.ItemsSource = Directory;
+
+            fileSelection.DataContext = this;
         }
 
         private void EditSelected(Object sender, RoutedEventArgs e)
@@ -112,7 +119,15 @@ namespace MarkdownSuite
                 Console.WriteLine(GenDoc.FinalDoc);
 
                 previewProcessedTextbox.Text = GenDoc.FinalDoc;
+
             }
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            GenDoc.FileLocation = Dir + GenDoc.DocName + ".md";
+
+            System.IO.File.WriteAllText(GenDoc.FileLocation, GenDoc.FinalDoc);
         }
     }
 
@@ -140,8 +155,10 @@ namespace MarkdownSuite
 
     public class GeneratedDocument
     {
-        public String FinalDoc { get; set; } = "";
+        public String FinalDoc { get; set; } = "preview";
 
-        public String DocName { get; set; } = "";
+        public String DocName { get; set; } = "Doc_" + System.DateTime.Now.ToFileTime();
+
+        public String FileLocation { get; set; }
     }
 }

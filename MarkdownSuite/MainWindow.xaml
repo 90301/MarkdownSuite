@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarkdownSuite"
         mc:Ignorable="d"
-        Title="Markdown Suite" Height="450" Width="800">
+        Title="Markdown Suite" Height="450" Width="800"
+        >
     <Grid>
-        <Button x:Name="loadDirectoryBtn" Content="Load Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="Button_Click"/>
-        <ListView x:Name="fileSelection" HorizontalAlignment="Left" Margin="10,42,0,10" Width="214" >
+        <Button x:Name="loadDirectoryBtn" Content="Load Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="LoadDirectory_Click"/>
+        <ListView x:Name="fileSelection" HorizontalAlignment="Left" Margin="10,42,0,10" Width="214" ItemsSource="{Binding Directory}" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
@@ -43,6 +44,7 @@
             <Button x:Name="processBtn" Content="Process" HorizontalAlignment="Left" Margin="707,165,0,0" VerticalAlignment="Top" Width="75" Click="ProcessBtn_Click"/>
             <TextBox x:Name="titleEditor" HorizontalAlignment="Left" Height="20" Margin="539,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163" Text="{Binding DocName, Mode=TwoWay}"/>
             <TextBox x:Name="previewProcessedTextbox" Margin="539,190,10,55" TextWrapping="Wrap" Text="{Binding FinalDoc, Mode=TwoWay}"/>
+            <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="539,369,0,0" VerticalAlignment="Top" Width="75" Click="Save_Click"/>
         </Grid>
     </Grid>
 </Window>
