@@ -9,6 +9,7 @@
         >
     <Grid>
         <Button x:Name="loadDirectoryBtn" Content="Load Directory" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="98" Click="LoadDirectory_Click"/>
+        <Button x:Name="refreshBtn" Content="Refresh" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top" Width="60" Click="RefreshBtn_Click"/>
         <ListView x:Name="fileSelection" Margin="10,42,520,10" ItemsSource="{Binding Directory}" >
             <ListView.View>
                 <GridView>

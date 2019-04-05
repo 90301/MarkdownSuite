@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -42,11 +43,21 @@ namespace MarkdownSuite
 
         private void LoadDirectory_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Dir = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+            } else
+            {
+                //Dir = AppDomain.CurrentDomain.BaseDirectory;
+                return;
+            }
+                
 
-            
             //Loads the directory
 
-            Dir = AppDomain.CurrentDomain.BaseDirectory;
+            
 
             //TODO dialog box
 
@@ -130,7 +141,7 @@ namespace MarkdownSuite
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            GenDoc.FileLocation = Dir + GenDoc.DocName + ".md";
+            GenDoc.FileLocation = System.IO.Path.Combine(Dir , GenDoc.DocName + ".md");
 
             System.IO.File.WriteAllText(GenDoc.FileLocation, GenDoc.FinalDoc);
 
@@ -139,7 +150,7 @@ namespace MarkdownSuite
             // create pdf
 
             string processName = "pandoc.exe";
-            string arguments = GenDoc.FileLocation + " -o " + Dir+GenDoc.DocName+".pdf";
+            string arguments = GenDoc.FileLocation + " -o " + System.IO.Path.Combine(Dir , GenDoc.DocName + ".pdf");
             
             var psi = new ProcessStartInfo
             {
@@ -158,6 +169,11 @@ namespace MarkdownSuite
             process.WaitForExit();
             
             
+        }
+
+        private void RefreshBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Directory.ToList().ForEach(x => x.Refresh());
         }
     }
 
@@ -181,6 +197,10 @@ namespace MarkdownSuite
             this.Content = File.ReadAllText(this.Dir);
         }
 
+        internal void Refresh()
+        {
+            this.Content = File.ReadAllText(this.Dir);
+        }
     }
 
     public class GeneratedDocument
