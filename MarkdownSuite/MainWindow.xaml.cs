@@ -31,9 +31,12 @@ namespace MarkdownSuite
             
 
             processedGrid.DataContext = GenDoc;
+            templateSelectorComboBox.DataContext = this;
         }
 
         public ObservableCollection<FileSelection> Directory { get; set; } = new ObservableCollection<FileSelection>();
+
+        public ObservableCollection<String> Templates { get; set; } = new ObservableCollection<String>();
 
         public FileSelection EditingSelected { get; set; }
 
@@ -50,7 +53,6 @@ namespace MarkdownSuite
                 Dir = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
             } else
             {
-                //Dir = AppDomain.CurrentDomain.BaseDirectory;
                 return;
             }
                 
@@ -66,11 +68,25 @@ namespace MarkdownSuite
             string[] filePaths = System.IO.Directory.GetFiles(Dir, "*.md",
                                          SearchOption.AllDirectories);
 
+            string[] templatePaths = System.IO.Directory.GetFiles(Dir, "*.latex",
+                                         SearchOption.AllDirectories);
+
             foreach (String filePath in filePaths)
             {
                 if (Directory.ToList().Find(x => x.Dir.Equals(filePath)) == null) {
 
                     Directory.Add(new FileSelection(filePath));
+
+                    Console.WriteLine(filePath);
+                }
+            }
+
+            foreach (String filePath in templatePaths)
+            {
+                if (Templates.ToList().Find(x => x.Equals(filePath)) == null)
+                {
+
+                    Templates.Add(filePath);
 
                     Console.WriteLine(filePath);
                 }
@@ -150,8 +166,11 @@ namespace MarkdownSuite
             // create pdf
 
             string processName = "pandoc.exe";
-            string arguments = GenDoc.FileLocation + " -o " + System.IO.Path.Combine(Dir , GenDoc.DocName + ".pdf");
+            string arguments = GenDoc.FileLocation; // input
+            arguments += " --template=" + templateSelectorComboBox.SelectedValue; // latex template
+            arguments += " -o " + System.IO.Path.Combine(Dir , GenDoc.DocName + ".pdf"); //output
             
+
             var psi = new ProcessStartInfo
             {
                 FileName = processName,
