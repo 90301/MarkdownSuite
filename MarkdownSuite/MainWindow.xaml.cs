@@ -167,7 +167,11 @@ namespace MarkdownSuite
 
             string processName = "pandoc.exe";
             string arguments = GenDoc.FileLocation; // input
-            arguments += " --template=" + templateSelectorComboBox.SelectedValue; // latex template
+
+            String templateLocation = (String) templateSelectorComboBox.SelectedValue;
+            if (templateLocation != null)
+                arguments += " --template=" + templateLocation; // latex template
+
             arguments += " -o " + System.IO.Path.Combine(Dir , GenDoc.DocName + ".pdf"); //output
             
 
