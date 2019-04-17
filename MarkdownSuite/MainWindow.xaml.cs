@@ -161,19 +161,19 @@ namespace MarkdownSuite
 
             System.IO.File.WriteAllText(GenDoc.FileLocation, GenDoc.FinalDoc);
 
+            GenDocx();
 
+            //GenPdf();
+            
+        }
 
-            // create pdf
-
+        public void GenDocx()
+        {
             string processName = "pandoc.exe";
             string arguments = GenDoc.FileLocation; // input
 
-            String templateLocation = (String) templateSelectorComboBox.SelectedValue;
-            if (templateLocation != null)
-                arguments += " --template=" + templateLocation; // latex template
+            arguments += " -o " + System.IO.Path.Combine(Dir, GenDoc.DocName + ".docx"); //output
 
-            arguments += " -o " + System.IO.Path.Combine(Dir , GenDoc.DocName + ".pdf"); //output
-            
 
             var psi = new ProcessStartInfo
             {
@@ -190,8 +190,37 @@ namespace MarkdownSuite
 
             process.Start();
             process.WaitForExit();
-            
-            
+        }
+
+        public void GenPdf()
+        {
+            // create pdf
+
+            string processName = "pandoc.exe";
+            string arguments = GenDoc.FileLocation; // input
+
+            String templateLocation = (String)templateSelectorComboBox.SelectedValue;
+            if (templateLocation != null)
+                arguments += " --template=" + templateLocation; // latex template
+
+            arguments += " -o " + System.IO.Path.Combine(Dir, GenDoc.DocName + ".pdf"); //output
+
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = processName,
+                Arguments = arguments,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardInput = true
+            };
+
+            var process = new Process { StartInfo = psi };
+
+            Console.WriteLine(processName + " " + arguments);
+
+            process.Start();
+            process.WaitForExit();
         }
 
         private void RefreshBtn_Click(object sender, RoutedEventArgs e)
